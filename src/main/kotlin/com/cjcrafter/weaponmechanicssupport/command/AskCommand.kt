@@ -20,15 +20,16 @@ class AskCommand (
     }
 
     override fun onCommand(event: SlashCommandInteractionEvent) {
+        event.deferReply().queue()
         val question = event.getOption("question")!!.asString
 
         val answer = GitbookAnswerListener.answer(gitbook, question)
         if (answer == null) {
-            event.reply("I'm sorry, but I could not find any good answers for that question.").setEphemeral(true).queue()
+            event.hook.editOriginal("I'm sorry, but I could not find any good answers for your question:\n$question").queue()
             return
         }
 
-        event.replyEmbeds(answer.first).apply {
+        event.hook.editOriginalEmbeds(answer.first).apply {
             if (answer.second.isNotEmpty())
                 this.setActionRow(answer.second)
         }.queue()

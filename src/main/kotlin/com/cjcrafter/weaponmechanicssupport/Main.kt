@@ -17,13 +17,9 @@ class Main {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            if (args.size != 3) {
-                println("java -jar <jar>.jar <openai key> <jda key> <gitbook key>")
-            }
-
-            val openai = OpenAI(args[0])
-            val gitbook = GitBookApi.builder().apiKey(args[2]).build()
-            val jda = JDABuilder.createDefault(args[1])
+            val openai = OpenAI(System.getenv("openai_key") ?: System.getenv("OPENAI_KEY"))
+            val gitbook = GitBookApi.builder().apiKey(System.getenv("gitbook_key") ?: System.getenv("GITBOOK_KEY")).build()
+            val jda = JDABuilder.createDefault(System.getenv("discord_key") ?: System.getenv("DISCORD_KEY"))
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .build()
 

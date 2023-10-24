@@ -10,7 +10,7 @@ class ButtonClickHandler(
 ) : ListenerAdapter() {
 
     override fun onButtonInteraction(event: ButtonInteractionEvent) {
-        val callback = event.deferReply()
+        event.deferReply().queue()
 
         if (!event.componentId.startsWith("gitbook_"))
             return
@@ -26,7 +26,7 @@ class ButtonClickHandler(
             return
         }
 
-        callback.setEmbeds(answer.first).apply {
+        event.hook.editOriginalEmbeds(answer.first).apply {
             if (answer.second.isNotEmpty())
                 setActionRow(answer.second)
         }.queue {

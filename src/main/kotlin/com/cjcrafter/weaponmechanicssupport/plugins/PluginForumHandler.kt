@@ -1,6 +1,7 @@
 package com.cjcrafter.weaponmechanicssupport.plugins
 
 import com.cjcrafter.weaponmechanicssupport.listeners.thread.ThreadMessageListener
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.channel.concrete.ForumChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -20,11 +21,13 @@ open class PluginForumHandler(
         if (forum?.name != channel) return
 
         // Make sure that the thread is specifically asking for help
-        if (!forum.availableTags.any { tag -> tagFilter.containsMatchIn(tag.name) })
+        if (!thread.appliedTags.any { tag -> tagFilter.containsMatchIn(tag.name) })
             return
 
         for (listener in listeners) {
             if (!listener.allowBotMessages() && event.author.isBot)
+                continue
+            if (!listener.allowAdminMessages() && event.member?.hasPermission(Permission.ADMINISTRATOR) == true)
                 continue
 
             listener.onThreadMessage(forum, thread, event.message, event)

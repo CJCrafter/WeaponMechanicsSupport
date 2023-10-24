@@ -9,12 +9,18 @@ class UpdateUnansweredListener : ThreadMessageListener {
 
     override fun allowBotMessages() = true
 
+    override fun allowAdminMessages() = true
+
     override fun onThreadMessage(
         forum: ForumChannel,
         thread: ThreadChannel,
         message: Message,
         event: MessageReceivedEvent
     ) {
+        // Do not try to modify a thread created by an admin
+        if (event.member?.hasPermission(net.dv8tion.jda.api.Permission.ADMINISTRATOR) == true)
+            return
+
         // Get the unanswered tag for the forum
         val unansweredTag = forum.availableTags.find { it.name == "unanswered" }
         if (unansweredTag == null) {

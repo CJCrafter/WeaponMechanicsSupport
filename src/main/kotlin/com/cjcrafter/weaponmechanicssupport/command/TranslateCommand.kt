@@ -27,7 +27,12 @@ class TranslateCommand (
             messageId = event.channel.latestMessageId
         }
 
-        val message = event.channel.retrieveMessageById(messageId).complete()
+        val message = try {
+            event.channel.retrieveMessageById(messageId).complete()
+        } catch (e: Throwable) {
+            null
+        }
+
         if (message == null) {
             event.hook.editOriginal("Message $messageId not found").queue()
             return

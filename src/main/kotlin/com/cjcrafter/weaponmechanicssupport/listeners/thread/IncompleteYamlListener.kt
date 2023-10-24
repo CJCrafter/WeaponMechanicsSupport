@@ -1,6 +1,7 @@
 package com.cjcrafter.weaponmechanicssupport.listeners.thread
 
 import com.cjcrafter.weaponmechanicssupport.lock.YamlLock
+import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.channel.concrete.ForumChannel
 import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel
@@ -22,7 +23,21 @@ class IncompleteYamlListener : ThreadMessageListener {
 
         // If the discord message contains log content
         if (hasYaml(message.contentRaw)) {
-            yamlLock.applyLock(thread)
+            val matches = regex.findAll(message.contentRaw)
+            val builder = StringBuilder()
+
+            for (match in matches) {
+                builder.append("```yaml\n")
+                builder.append(match.value)
+                builder.append("```\n")
+            }
+
+            val embed = EmbedBuilder()
+                .setTitle(message.author.name + "'s YAML")
+                .setDescription(builder.toString())
+                .build()
+
+            message.replyEmbeds(embed).queue();
         }
 
         // Check if .txt files are incomplete logs
@@ -31,7 +46,7 @@ class IncompleteYamlListener : ThreadMessageListener {
                 continue
 
             attachment.proxy.download().thenAccept {
-                if (IncompleteLogListener.isIncompleteLog(it.bufferedReader().readText())) {
+                if (hasYaml(it.bufferedReader().readText())) {
                     yamlLock.applyLock(thread)
                 }
             }
@@ -39,8 +54,10 @@ class IncompleteYamlListener : ThreadMessageListener {
     }
 
     companion object {
+
+        private val regex = """(^\s*[\w\-]+\s*:\s*.*${'$'}\s*(^\s+[\w\-]+\s*:\s*.*${'$'})+)+""".toRegex(RegexOption.MULTILINE)
+
         fun hasYaml(content: String): Boolean {
-            val regex = """(^\s*[\w\-]+\s*:\s*.*${'$'}\s*(^\s+[\w\-]+\s*:\s*.*${'$'})+)+""".toRegex(RegexOption.MULTILINE)
             val hasYaml = regex.containsMatchIn(content)
 
             // It is OK to send yaml IF it has a code block

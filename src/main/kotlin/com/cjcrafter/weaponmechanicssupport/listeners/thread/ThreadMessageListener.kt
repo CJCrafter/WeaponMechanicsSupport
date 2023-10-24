@@ -8,5 +8,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 interface ThreadMessageListener {
     fun allowBotMessages() = false
 
+    fun allowAdminMessages() = false
+
     fun onThreadMessage(forum: ForumChannel, thread: ThreadChannel, message: Message, event: MessageReceivedEvent)
 }

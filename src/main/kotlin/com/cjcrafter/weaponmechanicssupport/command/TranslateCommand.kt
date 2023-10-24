@@ -20,6 +20,8 @@ class TranslateCommand (
     }
 
     override fun onCommand(event: SlashCommandInteractionEvent) {
+        event.deferReply().queue()
+
         var messageId = event.getOption("messageId")?.asString
         if (messageId == null) {
             messageId = event.channel.latestMessageId
@@ -27,17 +29,17 @@ class TranslateCommand (
 
         val message = event.channel.retrieveMessageById(messageId).complete()
         if (message == null) {
-            event.reply("Message $messageId not found").setEphemeral(true).queue()
+            event.hook.editOriginal("Message $messageId not found").queue()
             return
         }
 
         val translation = TranslateMessageListener.translateMessage(openai, message.contentRaw)
         if (translation == null) {
-            event.reply("\"${message.contentRaw}\" was already english!").setEphemeral(true).queue()
+            event.hook.editOriginal("\"${message.contentRaw}\" was already english!").queue()
             return
         }
 
-        message.reply("""
+        event.hook.editOriginal("""
             ### Translation
             *$translation*
             """.trimIndent()).setAllowedMentions(emptyList()).queue()

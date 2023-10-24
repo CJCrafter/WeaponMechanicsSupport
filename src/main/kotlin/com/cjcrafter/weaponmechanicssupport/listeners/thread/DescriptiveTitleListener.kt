@@ -31,7 +31,7 @@ class DescriptiveTitleListener(
             // Ask ChatGPT to generate a better title.
             val request = ChatRequest(
                 "gpt-3.5-turbo", mutableListOf(
-                    "Read the given forum post and respond with a descriptive title used for the post. Use keywords from the message so people with similar questions can find it. Make sure words are unique and illustrative of the issue/question.".toSystemMessage(),
+                    "Read the given forum post and respond with a descriptive title for the post in the form of a question. Use English. Use sentence capitalization.".toSystemMessage(),
                     (thread.name + "\n\n" + message.contentRaw).take(400).toUserMessage()
                 )
             )

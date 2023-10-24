@@ -3,7 +3,7 @@ version = "1.0.0"
 
 plugins {
     java
-    kotlin("jvm") version "1.7.20-RC"
+    kotlin("jvm") version "1.9.20-RC"
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
@@ -18,6 +18,7 @@ dependencies {
     implementation("net.dv8tion:JDA:5.0.0-beta.13")
     implementation("org.yaml:snakeyaml:2.2")
     implementation("com.cjcrafter:openai:1.3.2")
+    implementation("com.cjcrafter:gitbook:1.0.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 }

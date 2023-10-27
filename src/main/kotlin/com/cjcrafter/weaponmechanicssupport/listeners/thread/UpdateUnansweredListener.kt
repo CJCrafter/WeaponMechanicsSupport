@@ -1,5 +1,6 @@
 package com.cjcrafter.weaponmechanicssupport.listeners.thread
 
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.channel.concrete.ForumChannel
 import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel
@@ -18,7 +19,7 @@ class UpdateUnansweredListener : ThreadMessageListener {
         event: MessageReceivedEvent
     ) {
         // Do not try to modify a thread created by an admin
-        if (event.member?.hasPermission(net.dv8tion.jda.api.Permission.ADMINISTRATOR) == true)
+        if (thread.retrieveThreadMemberById(thread.ownerId).complete().member.hasPermission(Permission.ADMINISTRATOR))
             return
 
         // Get the unanswered tag for the forum

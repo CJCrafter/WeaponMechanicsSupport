@@ -55,7 +55,7 @@ class IncompleteYamlListener : ThreadMessageListener {
 
     companion object {
 
-        private val regex = """(^\s*[\w\-]+\s*:\s*.*${'$'}\s*(^\s+[\w\-]+\s*:\s*.*${'$'})+)+""".toRegex(RegexOption.MULTILINE)
+        private val regex = """^(\s*[\w\-]+\s*:.*\n)+?(\s+[\w\-]+\s*:.*|\s+-\s*.*)*""".toRegex(RegexOption.MULTILINE)
 
         fun hasYaml(content: String): Boolean {
             val hasYaml = regex.containsMatchIn(content)

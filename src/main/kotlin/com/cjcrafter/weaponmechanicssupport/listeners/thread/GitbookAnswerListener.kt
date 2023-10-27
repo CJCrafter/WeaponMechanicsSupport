@@ -45,7 +45,7 @@ class GitbookAnswerListener(
 
             val answer = response.getOrNull()?.answer ?: return null
             val formattedAnswer = """
-                > $question
+                > ${question.split("\n").joinToString("\n> ")}
                 
                 ${answer.text}
                 
@@ -61,7 +61,7 @@ class GitbookAnswerListener(
                 .build()
 
             val previousQueries = previousQuestions.toMutableList().apply { add(question) }
-            val buttons = answer.followupQuestions.mapIndexed { index, s -> Button.secondary("gitbook_${index}_${previousQueries.joinToString { "|" }}", s) }
+            val buttons = answer.followupQuestions.mapIndexed { index, s -> Button.secondary("gitbook_${index}_${previousQueries.joinToString("|")}", s) }
             return Pair(embed, buttons)
         }
     }

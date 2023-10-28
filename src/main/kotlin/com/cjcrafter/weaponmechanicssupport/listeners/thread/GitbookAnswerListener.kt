@@ -60,8 +60,7 @@ class GitbookAnswerListener(
                 .setColor(Color(0, 0, 0))
                 .build()
 
-            val previousQueries = previousQuestions.toMutableList().apply { add(question) }
-            val buttons = answer.followupQuestions.mapIndexed { index, s -> Button.secondary("gitbook_${index}_${previousQueries.joinToString("|")}", s) }
+            val buttons = answer.followupQuestions.mapIndexed { index, s -> Button.secondary("gitbook_${index}", s) }
             return Pair(embed, buttons)
         }
     }

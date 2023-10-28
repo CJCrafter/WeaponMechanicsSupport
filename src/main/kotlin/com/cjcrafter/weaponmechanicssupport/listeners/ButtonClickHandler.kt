@@ -15,10 +15,10 @@ class ButtonClickHandler(
         if (!event.componentId.startsWith("gitbook_"))
             return
 
-        val previousQueries = event.componentId.substringAfterLast("_").split("|")
+        //val previousQueries = event.componentId.substringAfterLast("_").split("|")
         val buttonText = event.button.label
 
-        val answer = GitbookAnswerListener.answer(gitbook, buttonText, previousQueries)
+        val answer = GitbookAnswerListener.answer(gitbook, buttonText)
         if (answer == null) {
             event.hook.editOriginal("I'm sorry, but I could not find any good answers for that question.").queue()
             return

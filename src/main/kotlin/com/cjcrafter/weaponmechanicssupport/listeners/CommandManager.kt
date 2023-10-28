@@ -64,7 +64,7 @@ class CommandManager(
                         .setTimestamp(Instant.now())
                         .build()
 
-                    event.interaction.replyEmbeds(embed).setEphemeral(true).queue()
+                    event.replyEmbeds(embed).setEphemeral(true).queue()
                     return@submit
                 }
 
@@ -72,7 +72,12 @@ class CommandManager(
                 commandWrapper.onCommand(event)
 
             } catch (ex: Throwable) {
-                event.interaction.reply("An error occurred while processing your command!").setEphemeral(true).queue()
+                if (!event.interaction.isAcknowledged)
+                    event.deferReply().setContent("An error occurred while processing your command!").setEphemeral(true).queue()
+                else
+                    event.hook.editOriginal("An error occurred while processing your command!").queue()
+
+                println("Some error occurred in command ${commandWrapper.name} by ${event.user.name}")
                 ex.printStackTrace()
             }
         }

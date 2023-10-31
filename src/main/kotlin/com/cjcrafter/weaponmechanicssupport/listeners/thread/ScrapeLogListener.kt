@@ -19,6 +19,7 @@ class ScrapeLogListener : ThreadMessageListener {
         YamlFormatScraper::class.java,
         MinecraftVersionScraper::class.java,
         UpdateCheckerScraper::class.java,
+        ProtocolLibErrorScraper::class.java,
         SerializerExceptionScraper::class.java,
         ProtocolLibUpdateScraper::class.java,
     )

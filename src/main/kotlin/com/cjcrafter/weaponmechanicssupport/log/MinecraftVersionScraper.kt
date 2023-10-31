@@ -11,7 +11,8 @@ class MinecraftVersionScraper : LogScraper {
         "1.17.1",
         "1.18.2",
         "1.19.4",
-        "1.20.1"
+        "1.20.1",
+        "1.20.2"
     )
 
     override fun scrape(line: String): String? {

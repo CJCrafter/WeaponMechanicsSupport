@@ -12,7 +12,8 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button
 import java.awt.Color
 
 class GitbookAnswerListener(
-    private val gitbook: GitBookApi
+    private val gitbook: GitBookApi,
+    private val plugin: String,
 ): ThreadMessageListener {
 
     override fun onThreadMessage(
@@ -26,7 +27,7 @@ class GitbookAnswerListener(
             if (it != message)
                 return@queue
 
-            val answer = answer(gitbook, it.contentRaw) ?: return@queue
+            val answer = answer(gitbook, it.contentRaw, plugin) ?: return@queue
             message.replyEmbeds(answer.first).apply {
                 if (answer.second.isNotEmpty())
                     this.setActionRow(answer.second)
@@ -37,11 +38,11 @@ class GitbookAnswerListener(
 
     companion object {
         @JvmStatic
-        fun answer(gitbook: GitBookApi, question: String, previousQuestions: List<String> = listOf()): Pair<MessageEmbed, List<Button>>? {
-            val request = AskRequest(query = question, previousQueries = previousQuestions)
+        fun answer(gitbook: GitBookApi, question: String, plugin: String): Pair<MessageEmbed, List<Button>>? {
+            val request = AskRequest(query = question)
             val response = gitbook.ask(request)
 
-            println("Asking gitbook: $question (previous questions = ${previousQuestions.joinToString(", ")}))")
+            println("Asking gitbook: $question")
 
             val answer = response.getOrNull()?.answer ?: return null
             val formattedAnswer = """
@@ -49,7 +50,7 @@ class GitbookAnswerListener(
                 
                 ${answer.text}
                 
-                *I am a bot, and I often make mistakes.* Use `/ask` to ask another question.
+                *I am a bot, and I often make mistakes.* Use `/ask $plugin` to ask another question.
                 """.trimIndent()
 
             println("${question.replace("\n", "\\n")} -> ${answer.text.replace("\n", "\\n")}")
@@ -60,7 +61,7 @@ class GitbookAnswerListener(
                 .setColor(Color(0, 0, 0))
                 .build()
 
-            val buttons = answer.followupQuestions.mapIndexed { index, s -> Button.secondary("gitbook_${index}", s) }
+            val buttons = answer.followupQuestions.mapIndexed { index, s -> Button.secondary("gitbook_${index}_$plugin", s) }
             return Pair(embed, buttons)
         }
     }

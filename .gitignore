@@ -23,3 +23,5 @@ nbactions.xml
 build/
 !gradle/wrapper/gradle-wrapper.jar
 gradle.properties
+
+work/

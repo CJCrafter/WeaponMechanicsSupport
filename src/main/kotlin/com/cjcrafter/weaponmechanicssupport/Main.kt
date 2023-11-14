@@ -2,6 +2,7 @@ package com.cjcrafter.weaponmechanicssupport
 
 import com.cjcrafter.gitbook.GitBookApi
 import com.cjcrafter.openai.OpenAI
+import com.cjcrafter.openai.openAI
 import com.cjcrafter.weaponmechanicssupport.command.AskCommand
 import com.cjcrafter.weaponmechanicssupport.command.GenerateNameCommand
 import com.cjcrafter.weaponmechanicssupport.command.LockCommand
@@ -20,7 +21,7 @@ class Main {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            val openai = OpenAI(System.getenv("openai_key") ?: System.getenv("OPENAI_KEY"))
+            val openai = openAI { apiKey(System.getenv("openai_key") ?: System.getenv("OPENAI_KEY")) }
             val gitbook = GitBookApi.builder().apiKey(System.getenv("gitbook_key") ?: System.getenv("GITBOOK_KEY")).build()
             val deluxeCombatGitbook = GitBookApi.builder().apiKey(System.getenv("deluxecombat_key") ?: System.getenv("DELUXECOMBAT_KEY")).build()
             val jda = JDABuilder.createDefault(System.getenv("discord_key") ?: System.getenv("DISCORD_KEY"))

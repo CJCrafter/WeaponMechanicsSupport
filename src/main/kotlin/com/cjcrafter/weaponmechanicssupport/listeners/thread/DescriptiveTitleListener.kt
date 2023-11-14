@@ -4,6 +4,7 @@ import com.cjcrafter.openai.OpenAI
 import com.cjcrafter.openai.chat.ChatMessage.Companion.toSystemMessage
 import com.cjcrafter.openai.chat.ChatMessage.Companion.toUserMessage
 import com.cjcrafter.openai.chat.ChatRequest
+import com.cjcrafter.openai.chat.chatRequest
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.channel.concrete.ForumChannel
 import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel
@@ -29,14 +30,14 @@ class DescriptiveTitleListener(
             message: Message
         ): String {
             // Ask ChatGPT to generate a better title.
-            val request = ChatRequest(
-                "gpt-3.5-turbo", mutableListOf(
-                    "Read the given forum post and respond with a descriptive title for the post in the form of a question. Use English. Use sentence capitalization.".toSystemMessage(),
-                    (thread.name + "\n\n" + message.contentRaw).take(400).toUserMessage()
-                )
-            )
+            val request = chatRequest {
+                model("gpt-3.5-turbo")
+                addMessage("Read the given forum post and respond with a descriptive title for the post in the form of a question. Use English. Use sentence capitalization.".toSystemMessage())
+                addMessage((thread.name + "\n\n" + message.contentRaw).take(400).toUserMessage())
+            }
+
             val response = openai.createChatCompletion(request)
-            var title = response[0].message.content
+            var title = response[0].message.content!!
 
             // ChatGPT just LOVES to put quotes around shit. Remove them if we find them
             title = title.trim('"')

@@ -39,18 +39,6 @@ class IncompleteYamlListener : ThreadMessageListener {
 
             message.replyEmbeds(embed).queue();
         }
-
-        // Check if .txt files are incomplete logs
-        for (attachment in message.attachments) {
-            if (attachment.fileExtension != "txt" && attachment.fileExtension != "text")
-                continue
-
-            attachment.proxy.download().thenAccept {
-                if (hasYaml(it.bufferedReader().readText())) {
-                    yamlLock.applyLock(thread)
-                }
-            }
-        }
     }
 
     companion object {

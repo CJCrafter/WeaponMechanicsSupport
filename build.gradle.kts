@@ -4,7 +4,7 @@ version = "1.1.0"
 plugins {
     java
     kotlin("jvm") version "1.9.20"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 repositories {
@@ -15,10 +15,15 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 
     // https://mvnrepository.com/artifact/net.dv8tion/JDA
-    implementation("net.dv8tion:JDA:5.0.0-beta.13")
+    implementation("net.dv8tion:JDA:5.0.0-beta.20")
     implementation("org.yaml:snakeyaml:2.2")
-    implementation("com.cjcrafter:openai:2.0.2")
+    implementation("com.cjcrafter:openai:2.1.0")
     implementation("com.cjcrafter:gitbook:1.0.0")
+    implementation("com.h2database:h2:2.2.224")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.16.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
+
+    implementation("ch.qos.logback:logback-classic:1.4.12")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 }
@@ -46,15 +51,4 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
 
 tasks.test {
     useJUnitPlatform()
-}
-
-// Create javadocJar and sourcesJar tasks
-val javadocJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("javadoc")
-    from(tasks.named("javadoc"))
-}
-
-val sourcesJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("sources")
-    from(sourceSets.main.get().allSource)
 }

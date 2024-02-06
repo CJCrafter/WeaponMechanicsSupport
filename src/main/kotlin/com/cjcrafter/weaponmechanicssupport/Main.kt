@@ -1,16 +1,15 @@
 package com.cjcrafter.weaponmechanicssupport
 
 import com.cjcrafter.gitbook.GitBookApi
-import com.cjcrafter.openai.OpenAI
 import com.cjcrafter.openai.openAI
 import com.cjcrafter.weaponmechanicssupport.command.AskCommand
 import com.cjcrafter.weaponmechanicssupport.command.GenerateNameCommand
 import com.cjcrafter.weaponmechanicssupport.command.LockCommand
 import com.cjcrafter.weaponmechanicssupport.command.TranslateCommand
+import com.cjcrafter.weaponmechanicssupport.db.DiscordOpenAiMapping
 import com.cjcrafter.weaponmechanicssupport.listeners.ButtonClickHandler
 import com.cjcrafter.weaponmechanicssupport.listeners.CommandManager
-import com.cjcrafter.weaponmechanicssupport.plugins.DeluxeCombatForumHandler
-import com.cjcrafter.weaponmechanicssupport.plugins.WeaponMechanicsForumHandler
+import com.cjcrafter.weaponmechanicssupport.plugins.MechanicsFreeForumHandler
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.requests.GatewayIntent
 
@@ -31,11 +30,14 @@ class Main {
             gitbooks["weaponmechanics"] = gitbook
             gitbooks["deluxecombat"] = deluxeCombatGitbook
 
+            val dbMapping = DiscordOpenAiMapping()
+
             // Plugin thread listeners
             jda.addEventListener(
-                WeaponMechanicsForumHandler(openai, gitbook),
-                DeluxeCombatForumHandler(openai, deluxeCombatGitbook),
-                ButtonClickHandler()
+                MechanicsFreeForumHandler(openai, gitbook, dbMapping),
+                //WeaponMechanicsForumHandler(openai, gitbook, dbMapping),
+                //DeluxeCombatForumHandler(openai, deluxeCombatGitbook),
+                ButtonClickHandler(),
             )
 
             // Commands

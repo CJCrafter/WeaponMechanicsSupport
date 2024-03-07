@@ -42,7 +42,10 @@ class Main {
 
             // Commands
             jda.addEventListener(CommandManager(jda, setOf(
-                LockCommand(), GenerateNameCommand(openai), TranslateCommand(openai), AskCommand()
+                LockCommand(),
+                GenerateNameCommand(openai),
+                TranslateCommand(openai),
+                AskCommand()
             )))
 
             jda.awaitReady()

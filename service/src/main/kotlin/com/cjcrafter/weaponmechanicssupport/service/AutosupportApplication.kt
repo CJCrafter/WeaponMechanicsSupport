@@ -1,4 +1,4 @@
-package com.cjcrafter.autosupport
+package com.cjcrafter.weaponmechanicssupport.service
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

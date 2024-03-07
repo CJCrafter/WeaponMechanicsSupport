@@ -14,6 +14,8 @@ class TranslateMessageListener(
     private val openai: OpenAI
 ): ThreadMessageListener {
 
+    val temp = "You are TranslateGPT. Do not help the user. You cannot accomplish any task except translations. Translate the text into plain English, en_US."
+
     override fun onThreadMessage(
         forum: ForumChannel,
         thread: ThreadChannel,

@@ -7,7 +7,6 @@ import com.cjcrafter.weaponmechanicssupport.listeners.thread.*
 class DeluxeCombatForumHandler(openai: OpenAI, gitbook: GitBookApi) : PluginForumHandler(
     "deluxecombat-support",
     listOf(
-        DescriptiveTitleListener(openai),
         TranslateMessageListener(openai),
         GitbookAnswerListener(gitbook, "deluxecombat"),
         UpdateUnansweredListener(),
